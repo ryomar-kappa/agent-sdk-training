@@ -1,7 +1,7 @@
 """
-MCPs can be defined programmatically or loaded from an .mcp.json file.
+MCPはプログラムで定義することも、.mcp.jsonファイルから読み込むこともできます。
 
-For more details, see: https://docs.claude.com/en/api/agent-sdk/mcp
+詳細については以下を参照してください: https://docs.claude.com/en/api/agent-sdk/mcp
 """
 
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions
@@ -26,12 +26,12 @@ async def main():
             'MultiEdit',
             'Grep',
             'Glob',
-            # Notice that you MUST allow MCP tools otherwise they will not be available by default.
+            # MCPツールを許可する必要があることに注意してください。許可しない場合、デフォルトでは使用できません。
             # 'mcp__Playwright__browser_navigate'
         ],
         permission_mode="acceptEdits",
         setting_sources=["project"],
-        # Note: Playwright requires Node.js and Chrome to be installed!
+        # 注意: PlaywrightにはNode.jsとChromeのインストールが必要です!
         mcp_servers={
             "Playwright": {
                 "command": "npx",
@@ -59,7 +59,7 @@ async def main():
             await client.query(input_prompt)
 
             async for message in client.receive_response():
-                # Uncomment to print raw messages for debugging
+                # デバッグ用に生のメッセージを表示するには、コメントを外してください
                 # print(message)
                 parse_and_print_message(message, console)
 

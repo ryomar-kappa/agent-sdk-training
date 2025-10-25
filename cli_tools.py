@@ -1,5 +1,5 @@
 """
-CLI tools and convenience functions for working with the Claude Agent SDK in the terminal.
+ターミナルでClaude Agent SDKを使用するためのCLIツールと便利な関数。
 """
 
 from claude_agent_sdk import (
@@ -28,7 +28,7 @@ load_dotenv()
 
 
 # --------------------------------
-# Parse runtime args from CLI
+# CLIからランタイム引数を解析します
 # --------------------------------
 
 parser = argparse.ArgumentParser()
@@ -39,7 +39,7 @@ parser.add_argument("--print-raw", "-pr", default="False", help="Print raw messa
 
 
 # --------------------------------
-# Convenience functions for printing messages
+# メッセージを表示するための便利な関数
 # --------------------------------
 
 def print_rich_message(
@@ -48,7 +48,7 @@ def print_rich_message(
         console: Console
         ):
     """
-    Prints a message in a panel with a title and border color based on the message type.
+    メッセージタイプに基づいてタイトルと枠線の色を設定したパネルでメッセージを表示します。
     """
     styles = {
         "user": {
@@ -77,7 +77,7 @@ def print_rich_message(
             "border_style": "cyan"}
     }
 
-    # For tool results, try to apply JSON syntax highlighting
+    # ツール結果の場合、JSONシンタックスハイライトを適用します
     if type == "tool_result" and is_json_string(message):
         panel_content = Syntax(message, "json", theme="monokai", line_numbers=False)
     else:
@@ -99,7 +99,7 @@ def print_rich_message(
 
 
 def is_json_string(text: str) -> bool:
-    """Check if a string is valid JSON"""
+    """文字列が有効なJSONかどうかをチェックします"""
     try:
         json.loads(text)
         return True
@@ -109,42 +109,42 @@ def is_json_string(text: str) -> bool:
 
 def format_tool_result(content) -> str:
     """
-    Format tool result content nicely, handling nested JSON strings.
+    ネストされたJSON文字列を処理し、ツール結果の内容を見やすくフォーマットします。
     """
     if isinstance(content, str):
-        # Try to parse as JSON and format it
+        # JSONとして解析してフォーマットします
         try:
             parsed = json.loads(content)
             return json.dumps(parsed, indent=2)
         except json.JSONDecodeError:
             return content
     elif isinstance(content, list):
-        # Handle list of content blocks (common format)
+        # コンテンツブロックのリストを処理します（一般的な形式）
         formatted_parts = []
         for item in content:
             if isinstance(item, dict) and "text" in item:
-                # Try to parse the text field as JSON
+                # テキストフィールドをJSONとして解析します
                 text_content = item["text"]
                 try:
                     parsed_json = json.loads(text_content)
                     formatted_json = json.dumps(parsed_json, indent=2)
                     formatted_parts.append(formatted_json)
                 except json.JSONDecodeError:
-                    # If not JSON, just use the text as-is
+                    # JSONでない場合は、テキストをそのまま使用します
                     formatted_parts.append(text_content)
             else:
-                # For other dict structures, format as JSON
+                # その他の辞書構造の場合は、JSONとしてフォーマットします
                 formatted_parts.append(json.dumps(item, indent=2))
         return "\n\n".join(formatted_parts)
     else:
-        # For other types, convert to JSON
+        # その他のタイプの場合は、JSONに変換します
         return json.dumps(content, indent=2)
 
 
 def get_user_input(console: Console) -> str:
     """
-    Get user input and display it in a rich panel in one step.
-    Returns the user input string.
+    ユーザー入力を取得し、リッチパネルで1ステップで表示します。
+    ユーザー入力文字列を返します。
     """
     user_input = Prompt.ask("\n[bold yellow]You[/bold yellow]", console=console)
     print()
@@ -152,14 +152,14 @@ def get_user_input(console: Console) -> str:
 
 
 def parse_and_print_message(
-        message: Message, 
+        message: Message,
         console: Console,
         print_stats: bool = False
         ):
     """
-    Parse and print a message based on its type and content.
+    メッセージのタイプと内容に基づいてメッセージを解析して表示します。
     """
-    # Assistant messages include TextBlock, ToolUseBlock, ThinkingBlock, and ToolResultBlock
+    # Assistantメッセージには、TextBlock、ToolUseBlock、ThinkingBlock、およびToolResultBlockが含まれます
     # https://docs.claude.com/en/api/agent-sdk/python#content-block-types
     if isinstance(message, SystemMessage):
         if message.subtype == "compact_boundary":

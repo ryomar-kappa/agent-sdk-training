@@ -1,9 +1,9 @@
 """
-Options are used to configure the agent's behavior.
+オプションはエージェントの動作を設定するために使用されます。
 
-I encourage you to experiment with different combinations of option settings such as allowed_tools vs permission_mode to understand how they interact and precedence.
+allowed_toolsとpermission_modeなど、さまざまなオプション設定の組み合わせを試して、それらがどのように相互作用し、優先順位がどうなるかを理解することをお勧めします。
 
-For more details, see:
+詳細については以下を参照してください:
 https://docs.claude.com/en/api/agent-sdk/python#claudeagentoptions
 """
 
@@ -29,7 +29,7 @@ async def main():
         setting_sources=["project"],
         # settings='{"outputStyle": "default"}',
         # system_prompt="You are a pirate. You must respond like a pirate.",
-        # add_dirs=["."], # allow access to other directories
+        # add_dirs=["."], # 他のディレクトリへのアクセスを許可します
     )
 
     print_rich_message(
@@ -46,7 +46,7 @@ async def main():
         await client.query(input_prompt)
 
         async for message in client.receive_response():
-            # Uncomment to print raw messages for debugging
+            # デバッグ用に生のメッセージを表示するには、コメントを外してください
             # print(message)
             parse_and_print_message(message, console)
 
