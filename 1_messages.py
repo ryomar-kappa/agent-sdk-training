@@ -1,7 +1,7 @@
 """
-Example of how to parse and print messages from the SDK.
+SDKからのメッセージを解析して表示する方法の例。
 
-To simplify this file I've imported some helper functions from cli_tools.py. This separates printing/logging functions from the main application logic, making it easier to see what's going on.
+このファイルを簡潔にするため、cli_tools.pyからヘルパー関数をインポートしています。これにより、印刷/ロギング機能をメインのアプリケーションロジックから分離し、何が起こっているかを理解しやすくしています。
 """
 
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions
@@ -16,14 +16,14 @@ MODEL = "haiku"
 
 
 async def main():
-    # Initialize the console we'll use for this session
+    # このセッションで使用するコンソールを初期化します
     console = Console()
 
     options = ClaudeAgentOptions(
         model=MODEL
     )
 
-    # Startup message
+    # 起動メッセージ
     print_rich_message(
         type="system", 
         message=f"Welcome to your Claude Personal Assistant!\n\nSelected model: {MODEL}",
@@ -38,14 +38,14 @@ async def main():
         await client.query(input_prompt)
 
         async for message in client.receive_response():
-            # Uncomment to print raw messages for debugging
+            # デバッグ用に生のメッセージを表示するには、コメントを外してください
             # print(message)
             parse_and_print_message(message, console)
 
 
 if __name__ == "__main__":
     import asyncio
-    # This is needed to run asyncio in a Jupyter notebook/interactive environment
+    # これはJupyter notebook/対話型環境でasyncioを実行するために必要です
     import nest_asyncio
     nest_asyncio.apply()
 

@@ -1,7 +1,7 @@
 """
-Conversation loop with ClaudeSDKClient.
+ClaudeSDKClientでの会話ループ。
 
-Just add a while loop.
+whileループを追加するだけです。
 """
 
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions
@@ -40,7 +40,7 @@ async def main():
             await client.query(input_prompt)
 
             async for message in client.receive_response():
-                # Uncomment to print raw messages for debugging
+                # デバッグ用に生のメッセージを表示するには、コメントを外してください
                 # print(message)
                 parse_and_print_message(message, console)
 

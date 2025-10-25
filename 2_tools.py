@@ -1,14 +1,14 @@
 """
-Tool use is managed with ClaudeAgentOptions.
+ツールの使用はClaudeAgentOptionsで管理されます。
 
-There are three steps to add a custom tool:
-1. Define the tool function
-2. Create an SDK MCP server with the tool
-3. Configure the agent with the local MCP server
+カスタムツールを追加するには3つのステップがあります:
+1. ツール関数を定義する
+2. ツールを使用してSDK MCPサーバーを作成する
+3. ローカルMCPサーバーでエージェントを設定する
 
-Note that the convention for tool names is `mcp__<server_name>__<tool_name>`.
+ツール名の規則は `mcp__<server_name>__<tool_name>` です。
 
-For more details, see:
+詳細については以下を参照してください:
 https://docs.claude.com/en/api/agent-sdk/custom-tools
 """
 
@@ -24,12 +24,12 @@ load_dotenv()
 
 
 # ----------------------------
-# 1. Define a custom tool
+# 1. カスタムツールを定義する
 # ----------------------------
 
 @tool("search_products", "Search for products in the space toys catalog", {"query": str})
 async def search_products(args: dict[str, Any]) -> dict[str, Any]:
-    # Load products from JSON file
+    # JSONファイルから商品を読み込みます
     products_file = os.path.join("db", "products.json")
 
     try:
@@ -46,7 +46,7 @@ async def search_products(args: dict[str, Any]) -> dict[str, Any]:
     query = args['query'].lower()
     query_words = query.split()
 
-    # Simple search: find products that match the query in name or category
+    # シンプルな検索: 名前またはカテゴリでクエリに一致する商品を見つけます
     matching_products = []
     for product in products:
         if any(word in product['name'].lower() for word in query_words) or any(word in product['category'].lower() for word in query_words):
@@ -60,7 +60,7 @@ async def search_products(args: dict[str, Any]) -> dict[str, Any]:
             }]
         }
 
-    # Return the most relevant product (first match for simplicity)
+    # 最も関連性の高い商品を返します（簡略化のため最初のマッチ）
     best_match = matching_products[0]
     stock_status = "In Stock" if best_match['in_stock'] else "Out of Stock"
 
@@ -72,7 +72,7 @@ async def search_products(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 # ----------------------------
-# 2. Create an SDK MCP server with the custom tool
+# 2. カスタムツールを使用してSDK MCPサーバーを作成する
 # ----------------------------
 
 products_server = create_sdk_mcp_server(
@@ -87,13 +87,13 @@ async def main():
     args = parser.parse_args()
 
     # ----------------------------
-    # 3. Configure the agent with the local MCP server
+    # 3. ローカルMCPサーバーでエージェントを設定する
     # ----------------------------
     
     options = ClaudeAgentOptions(
         model=args.model,
         mcp_servers={"products": products_server},
-        # See all of the default tools:
+        # すべてのデフォルトツールについては以下を参照してください:
         # https://docs.claude.com/en/api/agent-sdk/python#tool-input%2Foutput-types
         allowed_tools=["Read", "Write", "mcp__products__search_products"],
         disallowed_tools=["WebSearch", "WebFetch"]
@@ -113,7 +113,7 @@ async def main():
         await client.query(input_prompt)
 
         async for message in client.receive_response():
-            # Uncomment to print raw messages for debugging
+            # デバッグ用に生のメッセージを表示するには、コメントを外してください
             # print(message)
             parse_and_print_message(message, console)
 

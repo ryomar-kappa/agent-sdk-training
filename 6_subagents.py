@@ -1,12 +1,12 @@
 """
-Subagents are a way to delegate tasks to specialized agents.
+サブエージェントは、専門的なエージェントにタスクを委任する方法です。
 
-Advantages include:
-- Context isolation: Subagents have their own context and do not share it with the main agent.
-- Tool isolation: Subagents can have their own set of allowed tools, which can be useful for security and manageability.
-- Parallelization: Subagents can run in parallel, which can improve performance.
+利点には以下が含まれます:
+- コンテキストの分離: サブエージェントは独自のコンテキストを持ち、メインエージェントと共有しません。
+- ツールの分離: サブエージェントは独自の許可ツールセットを持つことができ、セキュリティと管理性に役立ちます。
+- 並列化: サブエージェントは並列で実行できるため、パフォーマンスが向上します。
 
-For more details, see: https://docs.claude.com/en/api/agent-sdk/subagents
+詳細については以下を参照してください: https://docs.claude.com/en/api/agent-sdk/subagents
 """
 
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions, AgentDefinition
@@ -32,7 +32,7 @@ async def main():
             'MultiEdit',
             'Grep',
             'Glob',
-            # Task tool is required to use subagents!
+            # サブエージェントを使用するにはTaskツールが必要です!
             'Task',
             'TodoWrite',
             'WebSearch',
@@ -59,7 +59,7 @@ async def main():
             'mcp__Playwright__browser_tabs',
             'mcp__Playwright__browser_wait_for',
         ],
-        # We can also specify allowed tools for subagents, by default they inherit all tools including MCP tools.
+        # サブエージェントに許可するツールを指定することもできます。デフォルトでは、MCPツールを含むすべてのツールを継承します。
         agents={
             "youtube-analyst": AgentDefinition(
                 description="An expert at analyzing a user's Youtube channel performance. The analyst will produce a markdown report in the /docs directory.",
@@ -113,7 +113,7 @@ async def main():
                 ]
             )
         },
-        # Note: Playwright requires Node.js and Chrome to be installed!
+        # 注意: PlaywrightにはNode.jsとChromeのインストールが必要です!
         mcp_servers={
             "Playwright": {
                 "command": "npx",
@@ -141,7 +141,7 @@ async def main():
             await client.query(input_prompt)
 
             async for message in client.receive_response():
-                # Uncomment to print raw messages for debugging
+                # デバッグ用に生のメッセージを表示するには、コメントを外してください
                 # print(message)
                 parse_and_print_message(message, console)
 
